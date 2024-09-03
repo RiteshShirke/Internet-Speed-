@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Speed Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            color: #5b2c6f;
+            margin-bottom: 20px;
+        }
+        .speed-display {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .speed-display p {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #5b2c6f;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #8e4d9b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Network Speed Checker</h1>
+        <div class="speed-display" id="speedDisplay">
+            <p>Click the button below to check your network speed:</p>
+            <button onclick="checkSpeed()">Check Speed</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        let userImageLink = "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200714180638/CIP_Launch-banner.png";
+        let time_start, end_time;
+        let downloadSize = 5616998; // Size in bytes
+
+        function checkSpeed() {
+            // Add a cache-busting query string to the URL
+            let uniqueImageUrl = userImageLink + "?cache_bust=" + new Date().getTime();
+
+            let downloadImgSrc = new Image();
+            downloadImgSrc.onload = function () {
+                end_time = new Date().getTime();
+                displaySpeed();
+            };
+            time_start = new Date().getTime();
+            downloadImgSrc.src = uniqueImageUrl;
+        }
+
+        function displaySpeed() {
+            let timeDuration = (end_time - time_start) / 1000; // Convert to seconds
+            let loadedBits = downloadSize * 8;
+
+            let bps = (loadedBits / timeDuration).toFixed(2);
+            let speedInKbps = (bps / 1024).toFixed(2);
+            let speedInMbps = (speedInKbps / 1024).toFixed(2);
+
+            let speedDisplay = document.getElementById('speedDisplay');
+            speedDisplay.innerHTML = `
+                <p>Your internet connection speed is:</p>
+                <p>${bps} bps</p>
+                <p>${speedInKbps} kbps</p>
+                <p>${speedInMbps} Mbps</p>
+                <button onclick="checkSpeed()">Check Again</button>
+            `;
+        }
+    </script>
+</body>
+</html>
